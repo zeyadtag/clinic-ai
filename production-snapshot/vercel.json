@@ -1,0 +1,6 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/((?!assets/|drug-intelligence.js|clinical-news.js).*)", "destination": "/index.html" }
+  ]
+}

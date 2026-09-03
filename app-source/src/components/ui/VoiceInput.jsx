@@ -19,7 +19,7 @@ export default function VoiceInput({ onResult, className = '' }) {
     const recognition = new SpeechRecognitionAPI()
     recognition.continuous = false
     recognition.interimResults = false
-    recognition.lang = 'en-US'
+    recognition.lang = 'ar-EG'
     recognition.onresult = (event) => {
       const transcript = Array.from(event.results)
         .map((r) => r[0].transcript)
@@ -48,7 +48,7 @@ export default function VoiceInput({ onResult, className = '' }) {
       type="button"
       onClick={toggle}
       disabled={!supported}
-      title={supported ? 'Dictate this field' : 'Voice input not supported in this browser'}
+      title={supported ? 'إملاء صوتي بالعربية' : 'التسجيل الصوتي غير مدعوم في هذا المتصفح'}
       className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors ${
         listening ? 'border-accent bg-accent-light text-accent' : 'border-line text-ink/50 hover:bg-line/30'
       } disabled:cursor-not-allowed disabled:opacity-40 ${className}`}

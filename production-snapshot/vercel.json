@@ -1,6 +1,13 @@
 {
-  "cleanUrls": true,
   "rewrites": [
-    { "source": "/((?!assets/|drug-intelligence.js|clinical-news.js).*)", "destination": "/index.html" }
+    { "source": "/dashboard", "destination": "/" },
+    { "source": "/dashboard/:path*", "destination": "/" },
+    { "source": "/book", "destination": "/" },
+    { "source": "/portal", "destination": "/" },
+    { "source": "/login", "destination": "/" },
+    { "source": "/activate", "destination": "/" },
+    { "source": "/magazine", "destination": "/" },
+    { "source": "/magazine/:path*", "destination": "/" },
+    { "source": "/quiz/:path*", "destination": "/" }
   ]
 }

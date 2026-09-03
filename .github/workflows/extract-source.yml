@@ -1,0 +1,33 @@
+name: Extract Clinic Source
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/extract-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract source archive
+        run: |
+          rm -rf app-source
+          mkdir -p app-source
+          unzip -q clinic-saas-source.zip -d app-source
+      - name: Commit extracted source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app-source
+          if git diff --cached --quiet; then
+            echo "No source changes"
+          else
+            git commit -m "Expose clinic source for maintainable updates"
+            git push
+          fi

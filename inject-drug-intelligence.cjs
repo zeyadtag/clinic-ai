@@ -10,31 +10,80 @@ const js = String.raw`(() => {
   const SUPABASE_URL = 'https://dexeezznudtwaxqaustx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_isT5LDE4Z-KeBDxBjkzZfw_J7DdVeJq';
   const EDA_AVAIL = 'https://edaegypt.gov.eg/ar/%D8%B9%D9%86-%D8%A7%D9%84%D9%87%D9%8A%D8%A6%D8%A9/%D8%AE%D8%AF%D9%85%D8%A7%D8%AA-%D8%A7%D9%84%D8%B5%D9%81%D8%AD%D8%A9-%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9/%D8%AE%D8%AF%D9%85%D8%A7%D8%AA-%D8%A7%D9%84%D8%B5%D9%81%D8%AD%D8%A9-%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9/%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1-%D8%B9%D9%86-%D8%AA%D9%88%D8%A7%D9%81%D8%B1-%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D8%AD%D8%B6%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D8%AF%D9%88%D8%A7%D8%A6%D9%8A%D8%A9/';
-  const EDA_LISTS = 'https://edaegypt.gov.eg/ar/%D8%A5%D8%B5%D8%AF%D8%A7%D8%B1%D8%A7%D8%AA-%D9%88%D8%AA%D9%82%D8%A7%D8%B1%D9%8A%D8%B1-%D8%A7%D9%84%D9%87%D9%8A%D8%A6%D8%A9-%D9%81%D9%8A-%D8%A3%D8%B1%D9%82%D8%A7%D9%85/%D8%A5%D8%B5%D8%AF%D8%A7%D8%B1%D8%A7%D8%AA/%D9%82%D9%88%D8%A7%D8%A6%D9%85-%D8%AF%D9%88%D8%B1%D9%8A%D8%A9/';
+  const EDA_SEARCH = 'https://eservices.edaegypt.gov.eg/EDASearch/SearchRegDrugs.aspx';
 
   const css = `
-    #dermai-drug-intel{margin:22px 0;border:1px solid rgba(148,163,184,.22);border-radius:22px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(17,24,39,.94));box-shadow:0 18px 50px rgba(2,6,23,.18);overflow:hidden;color:#e5e7eb;direction:rtl}
-    #dermai-drug-intel *{box-sizing:border-box} .ddi-head{padding:20px 22px;border-bottom:1px solid rgba(148,163,184,.16);display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
-    .ddi-title{font-size:20px;font-weight:800;margin:0 0 5px}.ddi-sub{font-size:13px;color:#94a3b8;margin:0;max-width:680px;line-height:1.7}.ddi-badge{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(16,185,129,.12);color:#6ee7b7;border:1px solid rgba(16,185,129,.25);white-space:nowrap}
-    .ddi-body{padding:20px 22px}.ddi-search{display:flex;gap:10px;flex-wrap:wrap}.ddi-search input{flex:1;min-width:220px;background:#0b1220;border:1px solid rgba(148,163,184,.26);border-radius:14px;color:#fff;padding:13px 15px;outline:none}.ddi-search button,.ddi-link{border:0;border-radius:13px;padding:12px 16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.ddi-search button{background:#14b8a6;color:#042f2e}.ddi-link{background:rgba(148,163,184,.12);color:#cbd5e1;border:1px solid rgba(148,163,184,.18)}
-    .ddi-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.ddi-note{margin:14px 0 0;font-size:12px;color:#94a3b8;line-height:1.7}.ddi-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:18px}.ddi-card{background:rgba(2,6,23,.38);border:1px solid rgba(148,163,184,.16);border-radius:16px;padding:15px}.ddi-name{font-size:16px;font-weight:800;color:#f8fafc}.ddi-generic{font-size:13px;color:#99f6e4;margin-top:3px}.ddi-meta{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.ddi-chip{font-size:11px;padding:5px 8px;border-radius:999px;background:rgba(148,163,184,.1);color:#cbd5e1}.ddi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ddi-box{background:rgba(15,23,42,.7);border-radius:12px;padding:10px}.ddi-lbl{font-size:11px;color:#94a3b8}.ddi-val{font-size:14px;font-weight:800;margin-top:4px}.ok{color:#6ee7b7}.warn{color:#fcd34d}.bad{color:#fda4af}.muted{color:#cbd5e1}.ddi-source{font-size:11px;color:#94a3b8;margin-top:10px;line-height:1.6}.ddi-empty{padding:18px;border:1px dashed rgba(148,163,184,.25);border-radius:14px;color:#94a3b8;text-align:center;margin-top:18px}.ddi-spin{opacity:.65;pointer-events:none}@media(max-width:640px){.ddi-grid{grid-template-columns:1fr}.ddi-body,.ddi-head{padding:16px}}
+    #dermai-drug-intel{margin:22px 0;border:1px solid rgba(31,184,153,.24);border-radius:22px;background:linear-gradient(145deg,rgba(13,36,45,.98),rgba(10,28,36,.98));box-shadow:0 18px 50px rgba(2,6,23,.2);overflow:hidden;color:#e5e7eb;direction:rtl}
+    #dermai-drug-intel *{box-sizing:border-box}.ddi-head{padding:20px 22px;border-bottom:1px solid rgba(148,163,184,.16);display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}.ddi-title{font-size:21px;font-weight:800;margin:0 0 5px}.ddi-sub{font-size:13px;color:#a8b6c4;margin:0;max-width:720px;line-height:1.75}.ddi-badge{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(16,185,129,.12);color:#6ee7b7;border:1px solid rgba(16,185,129,.25);white-space:nowrap}.ddi-body{padding:20px 22px}.ddi-search{display:flex;gap:10px;flex-wrap:wrap}.ddi-search input{flex:1;min-width:220px;background:#081820;border:1px solid rgba(148,163,184,.26);border-radius:14px;color:#fff;padding:13px 15px;outline:none}.ddi-search input:focus{border-color:#1fb899}.ddi-search button,.ddi-link,.ddi-source-link{border:0;border-radius:13px;padding:12px 16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.ddi-search button{background:#1fb899;color:#042f2e}.ddi-link{background:rgba(148,163,184,.12);color:#d7e1e8;border:1px solid rgba(148,163,184,.18)}.ddi-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.ddi-note{margin:14px 0 0;font-size:12px;color:#94a3b8;line-height:1.7}.ddi-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:12px;margin-top:18px}.ddi-card{background:rgba(2,6,23,.34);border:1px solid rgba(148,163,184,.16);border-radius:16px;padding:15px}.ddi-name{font-size:16px;font-weight:800;color:#f8fafc}.ddi-generic{font-size:13px;color:#99f6e4;margin-top:3px}.ddi-meta{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.ddi-chip{font-size:11px;padding:5px 8px;border-radius:999px;background:rgba(148,163,184,.1);color:#cbd5e1}.ddi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ddi-box{background:rgba(15,23,42,.72);border-radius:12px;padding:10px}.ddi-lbl{font-size:11px;color:#94a3b8}.ddi-val{font-size:15px;font-weight:800;margin-top:4px}.ok{color:#6ee7b7}.warn{color:#fcd34d}.bad{color:#fda4af}.muted{color:#cbd5e1}.ddi-source{font-size:11px;color:#94a3b8;margin-top:10px;line-height:1.6}.ddi-source-link{margin-top:10px;padding:7px 10px;font-size:11px;background:rgba(31,184,153,.1);border:1px solid rgba(31,184,153,.2);color:#82ead5}.ddi-empty{grid-column:1/-1;padding:18px;border:1px dashed rgba(148,163,184,.25);border-radius:14px;color:#94a3b8;text-align:center}.ddi-spin{opacity:.65;pointer-events:none}@media(max-width:640px){.ddi-grid{grid-template-columns:1fr}.ddi-body,.ddi-head{padding:16px}}
   `;
 
-  function esc(v=''){return String(v).replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[m]))}
-  function fmtDate(v){if(!v)return 'غير محدد';try{return new Intl.DateTimeFormat('ar-EG',{dateStyle:'medium'}).format(new Date(v))}catch{return v}}
-  function availability(v){return ({available:['متوفر','ok'],limited:['توافر محدود','warn'],shortage:['نقص','bad'],unknown:['غير مؤكد','muted']})[v]||['غير مؤكد','muted']}
-  function renderCard(d){const a=availability(d.availability_status); const price=d.price_egp!=null?Number(d.price_egp).toLocaleString('ar-EG',{maximumFractionDigits:2})+' ج.م':'غير متاح'; const pClass=d.price_status==='verified'?'ok':d.price_status==='stale'?'warn':'muted';return `<article class="ddi-card"><div class="ddi-name">${esc(d.brand_name)}</div>${d.generic_name?`<div class="ddi-generic">${esc(d.generic_name)}</div>`:''}<div class="ddi-meta">${d.strength?`<span class="ddi-chip">${esc(d.strength)}</span>`:''}${d.dosage_form?`<span class="ddi-chip">${esc(d.dosage_form)}</span>`:''}${d.manufacturer?`<span class="ddi-chip">${esc(d.manufacturer)}</span>`:''}</div><div class="ddi-grid"><div class="ddi-box"><div class="ddi-lbl">آخر سعر مسجل</div><div class="ddi-val ${pClass}">${price}</div><div class="ddi-lbl">${d.price_verified_at?'تحقق '+fmtDate(d.price_verified_at):'لم يتم التحقق بعد'}</div></div><div class="ddi-box"><div class="ddi-lbl">حالة التوافر</div><div class="ddi-val ${a[1]}">${a[0]}</div><div class="ddi-lbl">${d.availability_verified_at?'تحقق '+fmtDate(d.availability_verified_at):'ليست بيانات مخزون لحظية'}</div></div></div>${d.availability_note?`<div class="ddi-source">${esc(d.availability_note)}</div>`:''}<div class="ddi-source">المصدر: ${esc(d.availability_source_name||d.price_source_name||'هيئة الدواء المصرية / مصدر موثق عند التحديث')}</div></article>`}
+  const esc=v=>String(v??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[m]));
+  const date=v=>{if(!v)return'';try{return new Intl.DateTimeFormat('ar-EG',{dateStyle:'medium'}).format(new Date(v))}catch{return v}};
+
+  function hideLegacyDrugSection(){
+    const all=[...document.querySelectorAll('h1,h2,h3,h4,h5,div,p,span')];
+    const heading=all.find(n=>{const t=(n.textContent||'').trim();return t==='أسعار وتوافر الأدوية في مصر' && !n.closest('#dermai-drug-intel')});
+    if(!heading)return;
+    let node=heading;
+    for(let i=0;i<6 && node.parentElement;i++){
+      const p=node.parentElement;
+      const txt=(p.textContent||'');
+      if(txt.includes('البحث عن مستحضر مسجل وسعره الرسمي') && txt.includes('الاستعلام عن توافر دواء')){node=p;break;}
+      node=p;
+    }
+    node.style.setProperty('display','none','important');
+    node.setAttribute('data-replaced-by-drug-intelligence','true');
+  }
+
+  function statusLabel(v){
+    if(v==='available') return ['مسجل بالسوق','ok','له سعر حديث في قاعدة الأدوية'];
+    if(v==='limited') return ['توافر محدود','warn','راجع الصيدلية قبل الوصف'];
+    if(v==='shortage') return ['نقص معلن','bad','راجع البدائل المتاحة'];
+    return ['تحقق من الصيدلية','muted','لا توجد إشارة مخزون لحظي'];
+  }
+
+  function card(d){
+    const st=statusLabel(d.availability_status);
+    const price=d.price_egp!=null?Number(d.price_egp).toLocaleString('ar-EG',{maximumFractionDigits:2})+' ج.م':'السعر يحتاج تحديث';
+    const pc=d.price_status==='verified'?'ok':d.price_status==='stale'?'warn':'muted';
+    const src=d.price_source_url||d.official_source_url||d.availability_source_url;
+    return `<article class="ddi-card"><div class="ddi-name">${esc(d.brand_name)}</div>${d.generic_name?`<div class="ddi-generic">${esc(d.generic_name)}</div>`:''}<div class="ddi-meta">${d.strength?`<span class="ddi-chip">${esc(d.strength)}</span>`:''}${d.dosage_form?`<span class="ddi-chip">${esc(d.dosage_form)}</span>`:''}${d.manufacturer?`<span class="ddi-chip">${esc(d.manufacturer)}</span>`:''}</div><div class="ddi-grid"><div class="ddi-box"><div class="ddi-lbl">السعر الحالي المسجل</div><div class="ddi-val ${pc}">${price}</div><div class="ddi-lbl">${d.price_verified_at?'تم التحقق '+date(d.price_verified_at):'—'}</div></div><div class="ddi-box"><div class="ddi-lbl">حالة الدواء في الدليل</div><div class="ddi-val ${st[1]}">${st[0]}</div><div class="ddi-lbl">${st[2]}</div></div></div>${d.availability_note?`<div class="ddi-source">${esc(d.availability_note)}</div>`:''}<div class="ddi-source">المصدر: ${esc(d.price_source_name||d.availability_source_name||'مصدر دوائي موثق')}</div>${src?`<a class="ddi-source-link" href="${esc(src)}" target="_blank" rel="noopener">فتح مصدر السعر</a>`:''}</article>`;
+  }
 
   async function search(q=''){
-    const root=document.getElementById('dermai-drug-intel'); if(!root)return; const out=root.querySelector('.ddi-results'); const btn=root.querySelector('[data-ddi-search]'); btn.classList.add('ddi-spin'); out.innerHTML='<div class="ddi-empty">جاري البحث…</div>';
-    try{const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/search_drug_intelligence',{method:'POST',headers:{'content-type':'application/json','apikey':SUPABASE_KEY,'authorization':'Bearer '+SUPABASE_KEY},body:JSON.stringify({search_text:q,specialty_filter:'dermatology',result_limit:24})}); if(!r.ok)throw new Error('HTTP '+r.status); const data=await r.json(); out.innerHTML=data.length?data.map(renderCard).join(''):'<div class="ddi-empty">لا توجد بيانات مطابقة موثقة حاليًا. استخدم زر هيئة الدواء للاستعلام الرسمي، ولن نعرض سعرًا أو توافرًا غير متحقق منه كأنه مؤكد.</div>'}catch(e){out.innerHTML='<div class="ddi-empty">تعذر تحميل بيانات الأدوية الآن. المرجع الرسمي ما زال متاحًا من الأزرار بالأعلى.</div>'}finally{btn.classList.remove('ddi-spin')}
+    const root=document.getElementById('dermai-drug-intel');if(!root)return;
+    const out=root.querySelector('.ddi-results'),btn=root.querySelector('[data-ddi-search]');
+    btn.classList.add('ddi-spin');out.innerHTML='<div class="ddi-empty">جاري تحميل الأسعار…</div>';
+    try{
+      const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/search_drug_intelligence',{method:'POST',headers:{'content-type':'application/json','apikey':SUPABASE_KEY,'authorization':'Bearer '+SUPABASE_KEY},body:JSON.stringify({search_text:q,specialty_filter:'dermatology',result_limit:30})});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const data=await r.json();
+      out.innerHTML=data.length?data.map(card).join(''):'<div class="ddi-empty">لا توجد نتيجة بهذا الاسم ضمن الأدوية المضافة حاليًا. جرّب المادة الفعالة أو استخدم البحث الرسمي.</div>';
+    }catch(e){out.innerHTML='<div class="ddi-empty">تعذر تحميل الأسعار الآن. جرّب مرة أخرى أو استخدم البحث الرسمي.</div>'}
+    finally{btn.classList.remove('ddi-spin')}
   }
 
-  function build(){if(document.getElementById('dermai-drug-intel'))return; const s=document.createElement('style');s.textContent=css;document.head.appendChild(s); const root=document.createElement('section');root.id='dermai-drug-intel';root.innerHTML=`<div class="ddi-head"><div><h3 class="ddi-title">ذكاء الأدوية — الجلدية</h3><p class="ddi-sub">ابحث باسم الدواء أو المادة الفعالة. السعر والتوافر يظهران فقط مع حالة التحقق وتاريخه؛ ولا نعتبر التوافر مخزونًا لحظيًا للصيدليات.</p></div><span class="ddi-badge">مصدر موثق + تاريخ تحقق</span></div><div class="ddi-body"><div class="ddi-search"><input data-ddi-input placeholder="اكتب اسم الدواء أو المادة الفعالة…" autocomplete="off"><button data-ddi-search>بحث</button></div><div class="ddi-actions"><a class="ddi-link" href="${EDA_AVAIL}" target="_blank" rel="noopener">الاستعلام الرسمي عن التوافر</a><a class="ddi-link" href="${EDA_LISTS}" target="_blank" rel="noopener">قوائم هيئة الدواء</a></div><p class="ddi-note">تنبيه: لا يتم اختلاق سعر أو حالة توافر. أي نتيجة غير موثقة تظهر بوضوح كـ «غير مؤكد».</p><div class="ddi-results"></div></div>`;
-    const nodes=[...document.querySelectorAll('h1,h2,h3,h4,button,a,div,span')]; const anchor=nodes.find(n=>{const t=(n.textContent||'').trim();return (t==='الطب والأدوية'||t==='الطب و الأدوية'||t.includes('أسعار وتوافر الأدوية في مصر'))&&n.children.length<6}); let host=anchor; if(anchor){for(let i=0;i<3&&host.parentElement;i++){if(host.parentElement.clientWidth>500)host=host.parentElement;else break} host.insertAdjacentElement('afterend',root)} else {const main=document.querySelector('main')||document.querySelector('[role="main"]')||document.body; main.appendChild(root)}
-    const input=root.querySelector('[data-ddi-input]'); root.querySelector('[data-ddi-search]').addEventListener('click',()=>search(input.value.trim())); input.addEventListener('keydown',e=>{if(e.key==='Enter')search(input.value.trim())}); search('');
+  function build(){
+    hideLegacyDrugSection();
+    if(document.getElementById('dermai-drug-intel'))return;
+    const style=document.createElement('style');style.textContent=css;document.head.appendChild(style);
+    const root=document.createElement('section');root.id='dermai-drug-intel';
+    root.innerHTML=`<div class="ddi-head"><div><h3 class="ddi-title">دليل أدوية الجلدية والأسعار في مصر</h3><p class="ddi-sub">يعرض مستحضرات فعلية بأسمائها التجارية وأسعار مسجلة ومصدر السعر. حالة «مسجل بالسوق» تعني وجود المستحضر في دليل الأسعار وليست ضمان مخزون لحظي في كل صيدلية.</p></div><span class="ddi-badge">أسعار فعلية + مصدر + تاريخ تحقق</span></div><div class="ddi-body"><div class="ddi-search"><input data-ddi-input placeholder="ابحث: Acretin، Skinoren، Isotretinoin…" autocomplete="off"><button data-ddi-search>بحث</button></div><div class="ddi-actions"><a class="ddi-link" href="${EDA_SEARCH}" target="_blank" rel="noopener">بحث هيئة الدواء</a><a class="ddi-link" href="${EDA_AVAIL}" target="_blank" rel="noopener">تحقق من التوافر اللحظي</a></div><p class="ddi-note">الأسعار قد تتغير؛ لذلك كل كارت يعرض تاريخ التحقق والمصدر. التوافر اللحظي يختلف حسب الصيدلية والمنطقة.</p><div class="ddi-results"></div></div>`;
+    const main=document.querySelector('main')||document.querySelector('[role="main"]')||document.body;
+    const newsHeading=[...document.querySelectorAll('h1,h2,h3')].find(n=>(n.textContent||'').includes('تحديثات الجلدية'));
+    const host=newsHeading?.parentElement?.parentElement||main;
+    host.insertAdjacentElement(newsHeading?'afterend':'beforeend',root);
+    const input=root.querySelector('[data-ddi-input]');root.querySelector('[data-ddi-search]').onclick=()=>search(input.value.trim());input.onkeydown=e=>{if(e.key==='Enter')search(input.value.trim())};
+    search('');
   }
-  let tries=0; const timer=setInterval(()=>{tries++; const path=location.pathname; if(path.includes('dashboard')){build();if(document.getElementById('dermai-drug-intel'))clearInterval(timer)} if(tries>40)clearInterval(timer)},500); const obs=new MutationObserver(()=>{if(location.pathname.includes('dashboard')&&!document.getElementById('dermai-drug-intel'))build()}); obs.observe(document.documentElement,{childList:true,subtree:true});
+
+  let last=location.pathname;
+  setInterval(()=>{
+    if(location.pathname!==last){last=location.pathname;document.getElementById('dermai-drug-intel')?.remove();}
+    if(location.pathname.includes('dashboard')){hideLegacyDrugSection();build();}
+  },500);
+  const obs=new MutationObserver(()=>{if(location.pathname.includes('dashboard')){hideLegacyDrugSection();if(!document.getElementById('dermai-drug-intel'))build();}});
+  obs.observe(document.documentElement,{childList:true,subtree:true});
 })();`;
 
 fs.writeFileSync(jsPath, js, 'utf8');

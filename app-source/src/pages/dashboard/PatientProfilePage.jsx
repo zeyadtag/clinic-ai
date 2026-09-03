@@ -97,7 +97,7 @@ export default function PatientProfilePage() {
                 {patientTreatments.map((t) => (
                   <div key={t.id} className="rounded-md border border-line p-3 text-sm">
                     <p className="font-medium text-ink">{t.medication}</p>
-                    <p className="text-ink/60">{t.instructions}</p>
+                    <p dir="auto" className="min-w-0 whitespace-pre-wrap break-words leading-7 text-ink/60">{t.instructions}</p>
                     <p className="mt-1 text-xs text-ink/40">
                       {t.startDate} → {t.endDate || 'ongoing'} · reminder: {t.reminderSchedule || 'none'}
                     </p>
@@ -168,23 +168,23 @@ function TreatmentForm({ onSave, onCancel }) {
 
   return (
     <div className="mt-3 space-y-3 rounded-md border border-line p-3">
-      <input className="input" placeholder="Medication / treatment" value={medication} onChange={(e) => setMedication(e.target.value)} />
+      <input className="input" placeholder="اسم الدواء أو العلاج" value={medication} onChange={(e) => setMedication(e.target.value)} />
       <div className="flex items-start gap-2">
-        <textarea className="input" rows={2} placeholder="Instructions" value={instructions} onChange={(e) => setInstructions(e.target.value)} />
+        <textarea className="input" rows={2} placeholder="تعليمات الاستخدام — مثال: بعد الأكل" value={instructions} onChange={(e) => setInstructions(e.target.value)} />
         <VoiceInput onResult={(t) => setInstructions((v) => (v ? `${v} ${t}` : t))} />
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <input type="date" className="input" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
         <input type="date" className="input" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
       </div>
       <select className="input" value={reminderSchedule} onChange={(e) => setReminderSchedule(e.target.value)}>
-        <option value="daily_08:00">Once daily, 8am</option>
-        <option value="daily_08:00,daily_20:00">Twice daily, 8am &amp; 8pm</option>
-        <option value="weekly_mon_08:00">Weekly, Monday 8am</option>
+        <option value="daily_08:00">مرة يوميًا — الساعة 8 صباحًا</option>
+        <option value="daily_08:00,daily_20:00">مرتين يوميًا — 8 صباحًا و8 مساءً</option>
+        <option value="weekly_mon_08:00">أسبوعيًا — الاثنين الساعة 8 صباحًا</option>
       </select>
       <div className="flex justify-end gap-2">
-        <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-        <Button onClick={() => medication && onSave({ medication, instructions, startDate, endDate: endDate || null, reminderSchedule })}>Save</Button>
+        <Button variant="ghost" onClick={onCancel}>إلغاء</Button>
+        <Button onClick={() => medication && onSave({ medication, instructions, startDate, endDate: endDate || null, reminderSchedule })}>حفظ العلاج</Button>
       </div>
     </div>
   )

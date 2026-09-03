@@ -4531,7 +4531,7 @@ function kt({ onResult: t, className: s = "" }) {
     return (
       (l.continuous = !1),
       (l.interimResults = !1),
-      (l.lang = "en-US"),
+      (l.lang = "ar-EG"),
       (l.onresult = (p) => {
         const m = Array.from(p.results)
           .map((u) => u[0].transcript)
@@ -4554,8 +4554,8 @@ function kt({ onResult: t, className: s = "" }) {
     onClick: x,
     disabled: !r,
     title: r
-      ? "Dictate this field"
-      : "Voice input not supported in this browser",
+      ? "إملاء صوتي بالعربية"
+      : "التسجيل الصوتي غير مدعوم في هذا المتصفح",
     className: `inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors ${a ? "border-accent bg-accent-light text-accent" : "border-line text-ink/50 hover:bg-line/30"} disabled:cursor-not-allowed disabled:opacity-40 ${s}`,
     children: r
       ? e.jsx(ca, { className: "h-4 w-4" })
@@ -5615,7 +5615,9 @@ function Ya() {
                       children: h.medication,
                     }),
                     e.jsx("p", {
-                      className: "mt-2 text-sm leading-6 text-ink/60",
+                      dir: "auto",
+                      className:
+                        "mt-2 min-w-0 whitespace-pre-wrap break-words text-sm leading-7 text-ink/60",
                       children: h.instructions,
                     }),
                     h.reminderSchedule &&
@@ -8254,7 +8256,9 @@ function Cn() {
                                   children: c.medication,
                                 }),
                                 e.jsx("p", {
-                                  className: "text-ink/60",
+                                  dir: "auto",
+                                  className:
+                                    "min-w-0 whitespace-pre-wrap break-words leading-7 text-ink/60",
                                   children: c.instructions,
                                 }),
                                 e.jsxs("p", {
@@ -8565,7 +8569,7 @@ function Sn({ onSave: t, onCancel: s }) {
     children: [
       e.jsx("input", {
         className: "input",
-        placeholder: "Medication / treatment",
+        placeholder: "اسم الدواء أو العلاج",
         value: a,
         onChange: (v) => i(v.target.value),
       }),
@@ -8575,7 +8579,7 @@ function Sn({ onSave: t, onCancel: s }) {
           e.jsx("textarea", {
             className: "input",
             rows: 2,
-            placeholder: "Instructions",
+            placeholder: "تعليمات الاستخدام — مثال: بعد الأكل",
             value: n,
             onChange: (v) => r(v.target.value),
           }),
@@ -8583,7 +8587,7 @@ function Sn({ onSave: t, onCancel: s }) {
         ],
       }),
       e.jsxs("div", {
-        className: "grid grid-cols-2 gap-2",
+        className: "grid grid-cols-1 gap-2 sm:grid-cols-2",
         children: [
           e.jsx("input", {
             type: "date",
@@ -8606,22 +8610,22 @@ function Sn({ onSave: t, onCancel: s }) {
         children: [
           e.jsx("option", {
             value: "daily_08:00",
-            children: "Once daily, 8am",
+            children: "مرة يوميًا — الساعة 8 صباحًا",
           }),
           e.jsx("option", {
             value: "daily_08:00,daily_20:00",
-            children: "Twice daily, 8am & 8pm",
+            children: "مرتين يوميًا — 8 صباحًا و8 مساءً",
           }),
           e.jsx("option", {
             value: "weekly_mon_08:00",
-            children: "Weekly, Monday 8am",
+            children: "أسبوعيًا — الاثنين الساعة 8 صباحًا",
           }),
         ],
       }),
       e.jsxs("div", {
         className: "flex justify-end gap-2",
         children: [
-          e.jsx(V, { variant: "ghost", onClick: s, children: "Cancel" }),
+          e.jsx(V, { variant: "ghost", onClick: s, children: "إلغاء" }),
           e.jsx(V, {
             onClick: () =>
               a &&
@@ -8632,7 +8636,7 @@ function Sn({ onSave: t, onCancel: s }) {
                 endDate: p || null,
                 reminderSchedule: u,
               }),
-            children: "Save",
+            children: "حفظ العلاج",
           }),
         ],
       }),

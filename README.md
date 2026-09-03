@@ -1,4 +1,1 @@
-# Clinic SaaS
-
-Production deployment wrapper for the complete Clinic SaaS React application.
-The full source is stored in `clinic-saas-source.zip` and is extracted during the Vercel build.
+Clinic AI production project. Drug Intelligence now uses an expanded dermatology-only live search with verified price sources and EDA availability links.

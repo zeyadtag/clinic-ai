@@ -42,13 +42,14 @@
   const css = `
     .tag-news-toggle{margin-top:14px;width:100%;border:1px solid rgba(31,184,153,.28);border-radius:12px;background:rgba(31,184,153,.08);color:#2f9f8d;padding:10px 14px;font:700 12px Tajawal,sans-serif;cursor:pointer;transition:.2s}
     .tag-news-toggle:hover{background:rgba(31,184,153,.15)}
-    .tag-news-detail{margin-top:12px;border-radius:14px;background:rgba(31,184,153,.06);border:1px solid rgba(31,184,153,.18);padding:15px;color:inherit}
+    .tag-news-detail{margin-top:12px;border-radius:14px;background:#102b35;border:1px solid rgba(94,234,212,.42);padding:18px;color:#f8fafc;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
     .tag-news-detail[hidden]{display:none}
-    .tag-news-intro{font-size:13px;line-height:1.9;color:rgba(226,232,240,.78);margin:0}
-    .tag-news-points{margin:12px 0 0;padding:0 18px 0 0;display:grid;gap:7px;font-size:12px;line-height:1.8;color:rgba(226,232,240,.72)}
-    .tag-news-action{margin:13px 0 0;border-right:3px solid #1fb899;padding:8px 11px;background:rgba(31,184,153,.08);font-size:12px;line-height:1.8;color:rgba(226,232,240,.86)}
-    .tag-news-source-note{margin:10px 0 0;font-size:10px;line-height:1.7;color:rgba(148,163,184,.78)}
-    @media (prefers-color-scheme:light){.tag-news-intro,.tag-news-points,.tag-news-action{color:#334155}.tag-news-source-note{color:#64748b}}
+    .tag-news-intro{font-size:15px;font-weight:600;line-height:2;color:#f8fafc;margin:0}
+    .tag-news-points{margin:14px 0 0;padding:0 20px 0 0;display:grid;gap:9px;font-size:14px;font-weight:500;line-height:1.95;color:#e2e8f0}
+    .tag-news-points li::marker{color:#5eead4}
+    .tag-news-action{margin:15px 0 0;border-right:4px solid #5eead4;padding:11px 13px;background:rgba(45,212,191,.16);font-size:14px;font-weight:500;line-height:1.9;color:#f8fafc}
+    .tag-news-action b{color:#99f6e4}
+    .tag-news-source-note{margin:12px 0 0;font-size:12px;font-weight:500;line-height:1.8;color:#cbd5e1}
   `;
 
   const onPage = () => location.pathname.replace(/\/$/, '') === ROUTE;

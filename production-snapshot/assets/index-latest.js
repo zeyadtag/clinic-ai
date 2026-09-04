@@ -7989,6 +7989,213 @@ function _n() {
     ],
   });
 }
+function Xn({ patientId: t, media: s = [] }) {
+  const a = s.filter((d) => d.stage === "before" && d.url),
+    i = s.filter((d) => d.stage === "after" && d.url),
+    [n, r] = o.useState(() => (a[0] == null ? void 0 : a[0].id) || ""),
+    [x, l] = o.useState(() => (i[0] == null ? void 0 : i[0].id) || ""),
+    [p, m] = o.useState(50),
+    [u, C] = o.useState(() => {
+      try {
+        return !!JSON.parse(
+          localStorage.getItem(`clinic:media-consent:${t}`) || "null",
+        );
+      } catch {
+        return !1;
+      }
+    });
+  o.useEffect(() => {
+    (!n && a[0] && r(a[0].id), !x && i[0] && l(i[0].id));
+  }, [a, i, n, x]);
+  const v = a.find((d) => d.id === n) || a[0],
+    g = i.find((d) => d.id === x) || i[0],
+    D = (d) => {
+      C(d);
+      try {
+        d
+          ? localStorage.setItem(
+              `clinic:media-consent:${t}`,
+              JSON.stringify({ granted: !0, grantedAt: new Date().toISOString() }),
+            )
+          : localStorage.removeItem(`clinic:media-consent:${t}`);
+      } catch {}
+    };
+  return e.jsxs("div", {
+    className: "mt-5 border-t border-line pt-5",
+    children: [
+      e.jsxs("div", {
+        className: "flex flex-wrap items-start justify-between gap-3",
+        children: [
+          e.jsxs("div", {
+            children: [
+              e.jsx("h4", {
+                className: "font-medium text-ink",
+                children: "مقارنة قبل وبعد",
+              }),
+              e.jsx("p", {
+                className: "mt-1 text-xs text-ink/55",
+                children:
+                  "اختر صورتين ثم حرّك المؤشر لمراجعة تطور الحالة بصريًا.",
+              }),
+            ],
+          }),
+          e.jsxs("label", {
+            className:
+              "flex max-w-md cursor-pointer items-start gap-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2 text-xs leading-5 text-ink/75",
+            children: [
+              e.jsx("input", {
+                type: "checkbox",
+                checked: u,
+                onChange: (d) => D(d.target.checked),
+                className: "mt-1 h-4 w-4 accent-primary",
+              }),
+              e.jsx("span", {
+                children:
+                  "أؤكد الحصول على موافقة المريض لحفظ الصور واستخدامها في المقارنة الطبية.",
+              }),
+            ],
+          }),
+        ],
+      }),
+      a.length === 0 || i.length === 0
+        ? e.jsx("div", {
+            className:
+              "mt-4 rounded-xl border border-dashed border-primary/25 bg-primary/5 p-4 text-center text-sm text-ink/60",
+            children:
+              a.length === 0 && i.length === 0
+                ? "ارفع صورة قبل العلاج وصورة بعد العلاج لتفعيل المقارنة."
+                : a.length === 0
+                  ? "ارفع صورة مصنفة «قبل العلاج» لتفعيل المقارنة."
+                  : "ارفع صورة مصنفة «بعد العلاج» لتفعيل المقارنة.",
+          })
+        : e.jsxs(e.Fragment, {
+            children: [
+              e.jsxs("div", {
+                className: "mt-4 grid gap-3 sm:grid-cols-2",
+                children: [
+                  e.jsxs("label", {
+                    className: "text-xs font-medium text-ink/65",
+                    children: [
+                      "صورة قبل العلاج",
+                      e.jsx("select", {
+                        className: "input mt-1 w-full",
+                        value: (v == null ? void 0 : v.id) || "",
+                        onChange: (d) => r(d.target.value),
+                        children: a.map((d, j) =>
+                          e.jsxs(
+                            "option",
+                            {
+                              value: d.id,
+                              children: ["قبل ", j + 1, " · ", ke(d.takenAt)],
+                            },
+                            d.id,
+                          ),
+                        ),
+                      }),
+                    ],
+                  }),
+                  e.jsxs("label", {
+                    className: "text-xs font-medium text-ink/65",
+                    children: [
+                      "صورة بعد العلاج",
+                      e.jsx("select", {
+                        className: "input mt-1 w-full",
+                        value: (g == null ? void 0 : g.id) || "",
+                        onChange: (d) => l(d.target.value),
+                        children: i.map((d, j) =>
+                          e.jsxs(
+                            "option",
+                            {
+                              value: d.id,
+                              children: ["بعد ", j + 1, " · ", ke(d.takenAt)],
+                            },
+                            d.id,
+                          ),
+                        ),
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+              u && v && g
+                ? e.jsxs("div", {
+                    className:
+                      "mt-4 overflow-hidden rounded-2xl border border-primary/20 bg-[#173b39] p-2 shadow-sm",
+                    children: [
+                      e.jsxs("div", {
+                        dir: "ltr",
+                        className:
+                          "relative aspect-[4/3] overflow-hidden rounded-xl bg-black/20",
+                        children: [
+                          e.jsx("img", {
+                            src: v.url,
+                            alt: "الحالة قبل العلاج",
+                            className:
+                              "absolute inset-0 h-full w-full object-contain",
+                          }),
+                          e.jsx("img", {
+                            src: g.url,
+                            alt: "الحالة بعد العلاج",
+                            className:
+                              "absolute inset-0 h-full w-full object-contain",
+                            style: { clipPath: `inset(0 ${100 - p}% 0 0)` },
+                          }),
+                          e.jsx("div", {
+                            className:
+                              "pointer-events-none absolute inset-y-0 w-0.5 bg-[#d7b46a] shadow",
+                            style: { left: `${p}%` },
+                          }),
+                          e.jsx("span", {
+                            className:
+                              "absolute left-3 top-3 rounded-full bg-black/60 px-2 py-1 text-xs text-white",
+                            children: "بعد",
+                          }),
+                          e.jsx("span", {
+                            className:
+                              "absolute right-3 top-3 rounded-full bg-black/60 px-2 py-1 text-xs text-white",
+                            children: "قبل",
+                          }),
+                          e.jsx("input", {
+                            type: "range",
+                            min: "0",
+                            max: "100",
+                            value: p,
+                            onChange: (d) => m(Number(d.target.value)),
+                            "aria-label": "تحريك مقارنة صور قبل وبعد",
+                            className:
+                              "absolute inset-x-4 bottom-4 z-10 cursor-ew-resize accent-[#d7b46a]",
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        className:
+                          "flex items-center justify-between gap-3 px-2 py-2 text-xs text-white/75",
+                        children: [
+                          e.jsxs("span", {
+                            children: ["بعد · ", ke(g.takenAt)],
+                          }),
+                          e.jsx("span", {
+                            className: "text-[#e8cf96]",
+                            children: "اسحب للمقارنة",
+                          }),
+                          e.jsxs("span", {
+                            children: ["قبل · ", ke(v.takenAt)],
+                          }),
+                        ],
+                      }),
+                    ],
+                  })
+                : e.jsx("div", {
+                    className:
+                      "mt-4 rounded-xl border border-[#d7b46a]/35 bg-[#d7b46a]/10 p-4 text-center text-sm text-ink/65",
+                    children:
+                      "لن تظهر الصور في أداة المقارنة قبل تسجيل موافقة المريض.",
+                  }),
+            ],
+          }),
+    ],
+  });
+}
 function Cn() {
   const { id: t } = Qe(),
     {
@@ -8392,6 +8599,7 @@ function Cn() {
                           ),
                         ),
                       }),
+                  e.jsx(Xn, { patientId: t, media: L }),
                 ],
               }),
             ],

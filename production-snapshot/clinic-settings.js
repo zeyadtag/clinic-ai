@@ -109,7 +109,8 @@
     settings = read();
     document.documentElement.style.setProperty('--clinic-primary', settings.clinic.primary);
     document.documentElement.style.setProperty('--clinic-accent', settings.clinic.accent);
-    document.title = `${settings.clinic.name} — ${settings.clinic.specialty}`;
+    const nextTitle = `${settings.clinic.name} — ${settings.clinic.specialty}`;
+    if (document.title !== nextTitle) document.title = nextTitle;
     document.querySelectorAll('p,h1,h2,h3,span').forEach(node => {
       if (node.children.length) return;
       const value = (node.textContent || '').trim();
@@ -241,6 +242,7 @@
   ensureLauncher();
   window.addEventListener('popstate', () => { ensureLauncher(); if (location.pathname !== SETTINGS_ROUTE) document.getElementById('clinic-settings-app')?.remove(); });
   window.addEventListener('clinic-settings-updated', applyBranding);
-  new MutationObserver(() => { if (!document.getElementById('clinic-settings-app')) applyBranding(); ensureLauncher(); }).observe(document.documentElement, { childList: true, subtree: true });
+  setTimeout(applyBranding, 500);
+  setTimeout(applyBranding, 1500);
   setInterval(ensureLauncher, 700);
 })();

@@ -2171,6 +2171,9 @@ function Aa({ children: t }) {
               stage: pe.stage,
               storagePath: pe.storage_path,
               takenAt: pe.taken_at,
+              consentGrantedAt: pe.consent_granted_at,
+              uploadSource: pe.upload_source,
+              note: pe.patient_note,
               url: (f == null ? void 0 : f.signedUrl) || null,
             };
           }),
@@ -5269,6 +5272,283 @@ const Pe = "tag_patient_portal_session",
       dateStyle: "medium",
       timeStyle: "short",
     }).format(new Date(t));
+function Ji({ credentials: t }) {
+  const [s, a] = o.useState([]),
+    [i, n] = o.useState(!0),
+    [r, x] = o.useState(!1),
+    [l, p] = o.useState(""),
+    [m, u] = o.useState(""),
+    [C, v] = o.useState(""),
+    [g, D] = o.useState(!1),
+    [_, T] = o.useState(null),
+    [z, N] = o.useState("");
+  const O = async () => {
+    if (!M) return;
+    n(!0);
+    const { data: h, error: R } = await M.functions.invoke("patient-media", {
+      body: { action: "list", phone: t.phone, code: t.code },
+    });
+    (n(!1), R || !(h != null && h.ok) ? u("تعذر تحميل صور المتابعة الآن.") : a(h.media || []));
+  };
+  o.useEffect(() => {
+    O();
+  }, [t.phone, t.code]);
+  o.useEffect(
+    () => () => {
+      z && URL.revokeObjectURL(z);
+    },
+    [z],
+  );
+  const I = (h) => {
+      var k;
+      const R = (k = h.target.files) == null ? void 0 : k[0];
+      (u(""), p(""));
+      if (!R) return;
+      if (!R.type.startsWith("image/") || !["image/jpeg", "image/png", "image/webp"].includes(R.type)) {
+        (u("اختر صورة بصيغة JPG أو PNG أو WEBP."), (h.target.value = ""));
+        return;
+      }
+      if (R.size > 5 * 1024 * 1024) {
+        (u("حجم الصورة يجب ألا يتجاوز 5 ميجابايت."), (h.target.value = ""));
+        return;
+      }
+      (z && URL.revokeObjectURL(z), T(R), N(URL.createObjectURL(R)));
+    },
+    h = async () => {
+      if (!M || !_ || !g) return;
+      (x(!0), u(""), p(""));
+      const R = new FormData();
+      (R.append("action", "upload"),
+        R.append("phone", t.phone),
+        R.append("code", t.code),
+        R.append("consent", "true"),
+        R.append("note", C),
+        R.append("file", _));
+      const { data: k, error: P } = await M.functions.invoke("patient-media", {
+        body: R,
+      });
+      if ((x(!1), P || !(k != null && k.ok))) {
+        u(
+          (k == null ? void 0 : k.error) === "consent_required"
+            ? "يجب تأكيد الموافقة قبل رفع الصورة."
+            : "تعذر رفع الصورة الآن. حاول مرة أخرى.",
+        );
+        return;
+      }
+      (a((F) => [k.media, ...F]),
+        p("تم إرسال صورة المتابعة للطبيب بأمان."),
+        T(null),
+        N(""),
+        v(""),
+        D(!1));
+    };
+  return e.jsxs($, {
+    className: "mt-6 border-primary/20",
+    children: [
+      e.jsxs("div", {
+        className: "flex flex-wrap items-start justify-between gap-3",
+        children: [
+          e.jsxs("div", {
+            children: [
+              e.jsxs("h2", {
+                className: "flex items-center gap-2 text-lg font-bold text-ink",
+                children: [
+                  e.jsx(It, { className: "h-5 w-5 text-primary" }),
+                  "صور المتابعة",
+                ],
+              }),
+              e.jsx("p", {
+                className: "mt-1 text-xs leading-5 text-ink/50",
+                children:
+                  "ارفع صورة واضحة لتطور الحالة؛ ستظهر داخل ملفك للطبيب فقط.",
+              }),
+            ],
+          }),
+          e.jsx("span", {
+            className:
+              "rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-bold text-primary-dark",
+            children: `${s.length} صورة`,
+          }),
+        ],
+      }),
+      e.jsxs("div", {
+        className: "mt-4 grid gap-5 lg:grid-cols-[.85fr_1.15fr]",
+        children: [
+          e.jsxs("div", {
+            className:
+              "rounded-2xl border border-line bg-base/40 p-4",
+            children: [
+              z
+                ? e.jsxs("div", {
+                    className:
+                      "relative mb-4 overflow-hidden rounded-xl border border-line bg-paper",
+                    children: [
+                      e.jsx("img", {
+                        src: z,
+                        alt: "معاينة صورة المتابعة",
+                        className: "aspect-[4/3] w-full object-contain",
+                      }),
+                      e.jsx("button", {
+                        type: "button",
+                        onClick: () => (T(null), N("")),
+                        className:
+                          "absolute left-2 top-2 rounded-full bg-black/65 px-3 py-1 text-xs text-white",
+                        children: "إزالة",
+                      }),
+                    ],
+                  })
+                : e.jsx("label", {
+                    className:
+                      "grid min-h-40 cursor-pointer place-items-center rounded-xl border border-dashed border-primary/30 bg-primary/5 p-5 text-center hover:bg-primary/10",
+                    children: e.jsxs("span", {
+                      children: [
+                        e.jsx(fa, {
+                          className: "mx-auto h-7 w-7 text-primary",
+                        }),
+                        e.jsx("b", {
+                          className: "mt-2 block text-sm text-ink",
+                          children: "اختيار صورة متابعة",
+                        }),
+                        e.jsx("small", {
+                          className: "mt-1 block text-ink/45",
+                          children: "JPG أو PNG أو WEBP — بحد أقصى 5MB",
+                        }),
+                        e.jsx("input", {
+                          type: "file",
+                          accept: "image/jpeg,image/png,image/webp",
+                          className: "sr-only",
+                          onChange: I,
+                        }),
+                      ],
+                    }),
+                  }),
+              e.jsxs("label", {
+                className: "mt-4 block",
+                children: [
+                  e.jsx("span", {
+                    className: "mb-2 block text-xs font-bold text-ink/60",
+                    children: "ملاحظة للطبيب (اختياري)",
+                  }),
+                  e.jsx("textarea", {
+                    className: "input min-h-20 resize-y",
+                    maxLength: 500,
+                    placeholder: "مثال: الاحمرار قل، لكن ما زالت توجد حكة...",
+                    value: C,
+                    onChange: (R) => v(R.target.value),
+                  }),
+                ],
+              }),
+              e.jsxs("label", {
+                className:
+                  "mt-3 flex cursor-pointer items-start gap-2 rounded-xl border border-[#d7b46a]/35 bg-[#d7b46a]/10 p-3 text-xs leading-5 text-ink/70",
+                children: [
+                  e.jsx("input", {
+                    type: "checkbox",
+                    checked: g,
+                    onChange: (R) => D(R.target.checked),
+                    className: "mt-1 h-4 w-4 accent-primary",
+                  }),
+                  e.jsx("span", {
+                    children:
+                      "أوافق على حفظ الصورة في ملفي الطبي واستخدامها بواسطة الطبيب لمتابعة الحالة والمقارنة العلاجية.",
+                  }),
+                ],
+              }),
+              m &&
+                e.jsx("p", {
+                  className:
+                    "mt-3 rounded-lg border border-danger/25 bg-danger/5 px-3 py-2 text-sm text-danger",
+                  children: m,
+                }),
+              l &&
+                e.jsx("p", {
+                  className:
+                    "mt-3 rounded-lg border border-primary/25 bg-primary/5 px-3 py-2 text-sm font-bold text-primary-dark",
+                  children: l,
+                }),
+              e.jsx(V, {
+                type: "button",
+                className: "mt-4 w-full",
+                disabled: r || !_ || !g,
+                onClick: h,
+                children: r ? "جاري الرفع الآمن..." : "إرسال الصورة للطبيب",
+              }),
+            ],
+          }),
+          e.jsxs("div", {
+            children: [
+              e.jsx("h3", {
+                className: "text-sm font-bold text-ink",
+                children: "الصور المرسلة سابقًا",
+              }),
+              i
+                ? e.jsx("p", {
+                    className: "mt-4 text-sm text-ink/45",
+                    children: "جاري تحميل الصور...",
+                  })
+                : s.length === 0
+                  ? e.jsx("div", {
+                      className:
+                        "mt-3 rounded-xl border border-dashed border-line p-6 text-center text-sm text-ink/45",
+                      children: "لم ترسل صور متابعة بعد.",
+                    })
+                  : e.jsx("div", {
+                      className: "mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3",
+                      children: s.map((R) =>
+                        e.jsxs(
+                          "figure",
+                          {
+                            className:
+                              "overflow-hidden rounded-xl border border-line bg-base/40",
+                            children: [
+                              R.url
+                                ? e.jsx("img", {
+                                    src: R.url,
+                                    alt: "صورة متابعة الحالة",
+                                    className: "aspect-square w-full object-cover",
+                                  })
+                                : e.jsx("div", {
+                                    className:
+                                      "grid aspect-square place-items-center text-ink/30",
+                                    children: e.jsx(It, {}),
+                                  }),
+                              e.jsxs("figcaption", {
+                                className: "p-2 text-[11px] leading-5",
+                                children: [
+                                  e.jsx("b", {
+                                    className: "text-primary-dark",
+                                    children:
+                                      R.uploadSource === "patient_portal"
+                                        ? "أرسلتها أنت"
+                                        : R.stage === "before"
+                                          ? "قبل العلاج"
+                                          : "بعد العلاج",
+                                  }),
+                                  e.jsx("p", {
+                                    className: "text-ink/45",
+                                    children: st(R.takenAt),
+                                  }),
+                                  R.note &&
+                                    e.jsx("p", {
+                                      className:
+                                        "mt-1 line-clamp-2 text-ink/60",
+                                      children: R.note,
+                                    }),
+                                ],
+                              }),
+                            ],
+                          },
+                          R.id,
+                        ),
+                      ),
+                    }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
 function Ya() {
   const [t, s] = o.useState({ phone: "", code: "" }),
     [a, i] = o.useState(null),
@@ -5553,6 +5833,7 @@ function Ya() {
           }),
         ],
       }),
+      e.jsx(Ji, { credentials: t }),
       e.jsxs("div", {
         className: "mt-6 grid gap-6 lg:grid-cols-2",
         children: [
@@ -8576,21 +8857,38 @@ function Cn() {
                                       children: e.jsx(It, {}),
                                     }),
                                 e.jsxs("figcaption", {
-                                  className:
-                                    "flex items-center justify-between p-2 text-xs",
+                                  className: "p-2 text-xs",
                                   children: [
-                                    e.jsx(ue, {
-                                      tone:
-                                        c.stage === "before"
-                                          ? "scheduled"
-                                          : "completed",
-                                      children:
-                                        c.stage === "before" ? "قبل" : "بعد",
+                                    e.jsxs("div", {
+                                      className:
+                                        "flex items-center justify-between gap-2",
+                                      children: [
+                                        e.jsx(ue, {
+                                          tone:
+                                            c.stage === "before"
+                                              ? "scheduled"
+                                              : "completed",
+                                          children:
+                                            c.stage === "before" ? "قبل" : "بعد",
+                                        }),
+                                        e.jsx("span", {
+                                          className: "text-ink/45",
+                                          children: ke(c.takenAt),
+                                        }),
+                                      ],
                                     }),
-                                    e.jsx("span", {
-                                      className: "text-ink/45",
-                                      children: ke(c.takenAt),
-                                    }),
+                                    c.uploadSource === "patient_portal" &&
+                                      e.jsx("p", {
+                                        className:
+                                          "mt-2 font-bold text-primary-dark",
+                                        children: "مرسلة من بوابة المريض",
+                                      }),
+                                    c.note &&
+                                      e.jsx("p", {
+                                        className:
+                                          "mt-1 whitespace-pre-wrap break-words leading-5 text-ink/60",
+                                        children: c.note,
+                                      }),
                                   ],
                                 }),
                               ],

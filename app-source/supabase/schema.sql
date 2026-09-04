@@ -170,6 +170,9 @@ create table before_after_media (
   visit_id uuid references patient_visits(id) on delete set null,
   stage text not null check (stage in ('before','after')),
   storage_path text not null, -- Supabase Storage object path, private bucket
+  consent_granted_at timestamptz,
+  upload_source text not null default 'staff' check (upload_source in ('staff','patient_portal')),
+  patient_note text,
   taken_at timestamptz not null default now(),
   created_at timestamptz not null default now()
 );

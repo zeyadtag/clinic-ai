@@ -8889,6 +8889,202 @@ function lt({ title: t, items: s }) {
     ],
   });
 }
+function ClinicSafetyPanel({ patient: t, diagnosis: s, treatment: a }) {
+  var C, v, g;
+  const i = (t == null ? void 0 : t.allergies) || [],
+    n = (t == null ? void 0 : t.chronicConditions) || [],
+    r = (t == null ? void 0 : t.currentMedications) || [],
+    x = (t == null ? void 0 : t.gender) === "Female",
+    l = `clinic-pregnancy-${(t == null ? void 0 : t.id) || "visit"}`,
+    [p, m] = o.useState(() => sessionStorage.getItem(l) || "unknown"),
+    [u, D] = o.useState(!1),
+    _ = `${s || ""} ${a || ""}`.toLowerCase(),
+    T = (h) => h.some((R) => _.includes(R)),
+    z = [...i, ...n, ...r].join(" ").toLowerCase(),
+    N = [];
+  (i.length > 0 &&
+    N.push({
+      level: "danger",
+      title: "حساسية دوائية مسجلة",
+      text: `راجع المادة الفعالة والمكونات قبل الوصف: ${i.join("، ")}`,
+    }),
+    n.length > 0 &&
+      N.push({
+        level: "warning",
+        title: "أمراض مزمنة تحتاج مراجعة",
+        text: n.join("، "),
+      }),
+    r.length > 0 &&
+      N.push({
+        level: "info",
+        title: "أدوية حالية",
+        text: `راجع التداخلات مع: ${r.join("، ")}`,
+      }),
+    x &&
+      p === "unknown" &&
+      N.push({
+        level: "warning",
+        title: "حالة الحمل/الرضاعة غير محددة",
+        text: "أكد الحالة قبل اعتماد أي دواء يحتاج احتياطات خاصة.",
+      }),
+    T(["isotretinoin", "ايزوتريتينوين", "ريتينويد", "retinoid", "تريتينوين"]) &&
+      N.push({
+        level: p === "pregnant" || p === "planning" ? "danger" : "warning",
+        title: "مراجعة الريتينويدات",
+        text:
+          p === "pregnant" || p === "planning"
+            ? "الخطة تتضمن ريتينويدًا مع حمل أو تخطيط للحمل — لا تعتمدها قبل مراجعة موانع الاستعمال والبروتوكول المعتمد."
+            : "راجع الحمل، وظائف الكبد، الدهون والتداخلات حسب نوع الريتينويد وطريقة استخدامه.",
+      }),
+    T(["doxy", "دوكس", "tetracycline", "تتراسيكلين", "مينوسايكلين"]) &&
+      N.push({
+        level: p === "pregnant" ? "danger" : "warning",
+        title: "مراجعة التتراسيكلينات",
+        text: "راجع الحمل والعمر، وتجنب الجمع مع الإيزوتريتينوين، وراجع التداخلات الدوائية.",
+      }),
+    T(["spironolactone", "سبيرونولاكتون", "الداكتون"]) &&
+      N.push({
+        level:
+          p === "pregnant" || /lisinopril|ليزينوبريل|potassium|بوتاسيوم|kidney|كلى/.test(z)
+            ? "danger"
+            : "warning",
+        title: "مراجعة السبيرونولاكتون",
+        text: "راجع الحمل، ضغط الدم، وظائف الكلى والبوتاسيوم والأدوية التي ترفعه.",
+      }),
+    T(["methotrexate", "ميثوتركسات"]) &&
+      N.push({
+        level: p === "pregnant" || p === "planning" ? "danger" : "warning",
+        title: "مراجعة الميثوتركسات",
+        text: "راجع الحمل، الكبد وصورة الدم والتداخلات وخطة المتابعة المعملية قبل الاعتماد.",
+      }),
+    T(["كورتيزون", "corticosteroid", "prednisone", "بريدنيزون", "steroid"]) &&
+      /diabetes|سكري|hypertension|ضغط/.test(z) &&
+      N.push({
+        level: "warning",
+        title: "كورتيزون مع مرض مزمن",
+        text: "الخطة تتضمن كورتيزونًا مع سكري أو ضغط مسجل؛ راجع الطريق والمدة والمتابعة.",
+      }),
+    /penicillin|بنسلين/.test(i.join(" ").toLowerCase()) &&
+      T(["penicillin", "بنسلين", "amoxicillin", "أموكسيسيلين"]) &&
+      N.push({
+        level: "danger",
+        title: "تطابق محتمل مع حساسية البنسلين",
+        text: "اسم دواء من مجموعة البنسلين ظهر في الخطة مع حساسية مسجلة.",
+      }),
+    /sulfa|سلفا/.test(i.join(" ").toLowerCase()) &&
+      T(["sulfamethoxazole", "سلفاميثوكسازول", "sulfonamide", "سلفوناميد"]) &&
+      N.push({
+        level: "danger",
+        title: "تطابق محتمل مع حساسية السلفا",
+        text: "اسم دواء من مجموعة السلفا ظهر في الخطة مع حساسية مسجلة.",
+      }));
+  const O = N.filter((h) => h.level === "danger").length,
+    I = (h) => {
+      (m(h), sessionStorage.setItem(l, h), D(!1));
+    };
+  return e.jsxs("section", {
+    className:
+      "rounded-card border border-danger/25 bg-gradient-to-br from-danger/5 to-paper p-5",
+    children: [
+      e.jsxs("div", {
+        className: "flex flex-wrap items-start justify-between gap-3",
+        children: [
+          e.jsxs("div", {
+            children: [
+              e.jsxs("h3", {
+                className: "flex items-center gap-2 font-bold text-ink",
+                children: [
+                  e.jsx(Ye, { className: "h-5 w-5 text-danger" }),
+                  " مركز تنبيهات السلامة",
+                ],
+              }),
+              e.jsx("p", {
+                className: "mt-1 text-xs leading-5 text-ink/50",
+                children:
+                  "يفحص بيانات المريض ونص الخطة لتحديد نقاط المراجعة قبل اعتمادها.",
+              }),
+            ],
+          }),
+          e.jsxs("span", {
+            className: `rounded-full px-3 py-1 text-xs font-bold ${O > 0 ? "bg-danger/10 text-danger" : N.length > 0 ? "bg-warning/10 text-warning" : "bg-primary/10 text-primary-dark"}`,
+            children: [N.length, " تنبيه", O > 0 ? ` · ${O} مهم` : ""],
+          }),
+        ],
+      }),
+      x &&
+        e.jsxs("label", {
+          className: "mt-4 block",
+          children: [
+            e.jsx("span", {
+              className: "mb-1 block text-xs font-bold text-ink/60",
+              children: "حالة الحمل والرضاعة",
+            }),
+            e.jsxs("select", {
+              className: "input max-w-md",
+              value: p,
+              onChange: (h) => I(h.target.value),
+              children: [
+                e.jsx("option", { value: "unknown", children: "غير مسجلة — يلزم السؤال" }),
+                e.jsx("option", { value: "none", children: "لا يوجد حمل أو رضاعة" }),
+                e.jsx("option", { value: "pregnant", children: "حامل" }),
+                e.jsx("option", { value: "breastfeeding", children: "رضاعة طبيعية" }),
+                e.jsx("option", { value: "planning", children: "تخطط للحمل" }),
+              ],
+            }),
+          ],
+        }),
+      N.length === 0
+        ? e.jsx("p", {
+            className: "mt-4 rounded-lg bg-primary/10 px-3 py-2 text-sm text-primary-dark",
+            children:
+              "لا توجد تنبيهات تلقائية من البيانات المسجلة أو نص الخطة الحالي.",
+          })
+        : e.jsx("div", {
+            className: "mt-4 space-y-2",
+            children: N.map((h, R) =>
+              e.jsxs(
+                "div",
+                {
+                  className: `rounded-lg border p-3 ${h.level === "danger" ? "border-danger/25 bg-danger/5" : h.level === "warning" ? "border-warning/25 bg-warning/5" : "border-line bg-base/60"}`,
+                  children: [
+                    e.jsx("p", {
+                      className: `text-xs font-bold ${h.level === "danger" ? "text-danger" : h.level === "warning" ? "text-warning" : "text-ink/70"}`,
+                      children: h.title,
+                    }),
+                    e.jsx("p", {
+                      className: "mt-1 text-xs leading-5 text-ink/65",
+                      children: h.text,
+                    }),
+                  ],
+                },
+                `${h.title}-${R}`,
+              ),
+            ),
+          }),
+      N.length > 0 &&
+        e.jsxs("label", {
+          className:
+            "mt-4 flex cursor-pointer items-start gap-2 rounded-lg border border-line bg-base/60 px-3 py-2 text-xs leading-5 text-ink/70",
+          children: [
+            e.jsx("input", {
+              type: "checkbox",
+              className: "mt-1 accent-primary",
+              checked: u,
+              onChange: (h) => D(h.target.checked),
+            }),
+            u
+              ? "تمت مراجعة التنبيهات — راجع الخطة النهائية قبل إنهاء الكشف."
+              : "أؤكد أنني راجعت الحساسية والتداخلات والحمل والأمراض المزمنة.",
+          ],
+        }),
+      e.jsx("p", {
+        className: "mt-3 text-[11px] leading-5 text-ink/40",
+        children:
+          "تنبيهات دعم قرار وليست فحصًا شاملًا للتداخلات؛ المرجع الدوائي والتقييم السريري للطبيب هما الأساس.",
+      }),
+    ],
+  });
+}
 function Ln() {
   var L, q, ee, xe;
   const { appointmentId: t } = Qe(),
@@ -9003,6 +9199,11 @@ function Ln() {
 ${d}`
                       : d,
                   ),
+              }),
+              e.jsx(ClinicSafetyPanel, {
+                patient: m,
+                diagnosis: g,
+                treatment: _,
               }),
               e.jsx($, {
                 children: e.jsx(rt, {
